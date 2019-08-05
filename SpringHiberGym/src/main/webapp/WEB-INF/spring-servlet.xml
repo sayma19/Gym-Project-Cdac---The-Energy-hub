@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+		
+	<context:annotation-config />
+	<context:component-scan base-package="training.sample" />
+	<mvc:resources mapping="/resources/**" location="/resources/"  
+	cache-period="456"/>
+    <mvc:annotation-driven />
+    
+    <mvc:resources mapping="/webjars/**" location="/webjars/" />
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+   <property name="prefix" value="/WEB-INF/views/"></property>
+   <property name="suffix"  value=".jsp"></property> 
+    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>  
+
+</bean>	
+<!-- <bean id="propholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="Locations" value="classpath:/data.properties"></property>
+     </bean> -->
+     <bean id="ds" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	    <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />  
+        <property name="url" value="jdbc:mysql://localhost:3306/demo" />  
+        <property name="username" value="root" />  
+        <property name="password" value="123@Mysql" />  
+	  
+	</bean>
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+	   <property name="dataSource" ref="ds"></property>
+	   <property name="packagesToScan" value="training.sample.model"></property>
+	   <property name="hibernateProperties">
+	      <value>
+				hibernate.dialect=${database.dialect}
+				hibernate.format_sql=true
+				hibernate.show_sql=true
+				hibernate.hbm2ddl.auto=update
+			</value>
+	   
+	   </property>
+	   </bean>
+	   
+	     <bean id="myTransactionManager"
+            class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+	   
+
+	
+
+</beans>
